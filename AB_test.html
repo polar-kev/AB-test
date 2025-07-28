@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dancer Portfolio</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-color: #f9f9f9;
+    }
+
+    header {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+
+    .videos {
+      margin-top: 30px;
+    }
+
+    iframe {
+      margin: 10px;
+      width: 300px;
+      height: 170px;
+      border: none;
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-QYLQRRMKEM"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-QYLQRRMKEM');
+  </script>
+</head>
+
+<body>
+  <header>
+    🌟 Meet The Dancer 🌟
+  </header>
+
+  <section class="videos" id="videoSection">
+    <h2>Performance Previews</h2>
+    <!-- Video previews will be injected here by JavaScript -->
+  </section>
+
+  <script>
+    /**
+     * Sets a cookie with a given name, value, and expiration in days
+     */
+    function setCookie(name, value, days) {
+      const d = new Date();
+      d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+      const expires = "expires=" + d.toUTCString();
+      document.cookie = `${name}=${value};${expires};path=/`;
+    }
+
+    /**
+     * Gets the value of a cookie by name
+     */
+    function getCookie(name) {
+      const decodedCookie = decodeURIComponent(document.cookie);
+      const cookies = decodedCookie.split(';');
+      name = name + "=";
+      for (let i = 0; i < cookies.length; i++) {
+        let c = cookies[i].trim();
+        if (c.indexOf(name) === 0) {
+          return c.substring(name.length, c.length);
+        }
+      }
+      return "";
+    }
+
+    // ----------------- A/B TEST LOGIC --------------------
+
+    // Define video sets for each group
+    const videoGroups = {
+      A: [
+        "CSi6DYNcoEk?si=EPXRKkkotWRi5Xcr", // Replace with Group A video 1 ID
+        "FGNH9XnFA4U?si=hklyq1NNZ0c6pqkQ",  // Replace with Group A video 2 ID
+      ],
+      B: [
+        "CSi6DYNcoEk?si=EPXRKkkotWRi5Xcr", // Replace with Group B video 1 ID
+        "86pRa1i6wS4?si=GfsR02vgZbkQV2ZJ"  // Replace with Group B video 2 ID
+      ]
+    };
+
+    // Get existing user group from cookie or assign a new one
+    let userGroup = getCookie("userGroup");
+    if (!userGroup) {
+      userGroup = Math.random() < 0.5 ? "A" : "B";
+      setCookie("userGroup", userGroup, 30); // Store for 30 days
+    }
+
+    // Log A/B assignment to Google Analytics
+    if (typeof gtag === "function") {
+      gtag('event', 'user_group_assigned', {
+        user_group: userGroup
+      });
+    }
+
+    // Render videos based on user group
+    const videoSection = document.getElementById("videoSection");
+    videoGroups[userGroup].forEach(videoId => {
+      const iframe = document.createElement("iframe");
+      iframe.src = `https://www.youtube.com/embed/${videoId}`;
+      iframe.allowFullscreen = true;
+      videoSection.appendChild(iframe);
+    });
+  </script>
+</body>
+</html>
